@@ -10,8 +10,6 @@ For any questions, please open new issues on this repository - and if you wish t
 
 Thanks!
 
-
-
 ~ Hyungwoon (@lhw-1)
 
 ## Embedding Instructions
