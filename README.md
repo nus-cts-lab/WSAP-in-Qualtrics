@@ -60,7 +60,7 @@ The following popup will appear.
 
 ![alt text](assets/10.PNG)
 
-Copy-and-paste the code in `code/index.js` into this box, and then click **"Save"**.
+Delete all the code in here, copy-and-paste the code in `code/index.js` into this box, and then click **"Save"**.
 
 ![alt text](assets/11.PNG)
 
