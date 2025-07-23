@@ -1,19 +1,20 @@
 # WSAP (Word Sentence Association Paradigm) Experiment - PsychoPy 
 
-## Running the experimtent
+## Running the experiment
 1. Open PsychoPy Coder
 2. Open wsap_experiment.py
 3. If this is your first time running the experiment, install pandas (steps below)
 4. Click green **Run** button above 
 5. Enter participant details in dialog
 
-**Installing Pandas**
+## **Installing Pandas**
 Copy and paste the following code into Python Shell:
-'''
+```
 import subprocess
 import sys
 subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
-'''
+```
+
 
 ## Project Structure
 ```
