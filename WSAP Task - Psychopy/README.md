@@ -1,0 +1,78 @@
+# WSAP (Word Sentence Association Paradigm) Experiment - PsychoPy 
+
+## Running the experiment
+1. Open PsychoPy Coder
+2. Open wsap_experiment.py
+3. If this is your first time running the experiment, install pandas (steps below)
+4. Click green **Run** button above 
+5. Enter participant details in dialog
+
+## **Installing Pandas**
+Copy and paste the following code into Python Shell:
+```
+import subprocess
+import sys
+subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
+```
+
+## Project Structure
+```
+WSAP_Experiment/
+├── wsap_experiment.py          # Main experiment file
+└── data/                       # Created for results after running experiment
+```
+
+## Experiment Details
+
+- **100 main trials** + 5 practice trials
+- **4 valence categories**: benign, health-threat, anxiety, dysphoric, positive
+- **Duration**: ~12 minutes 
+
+## Data Output
+
+**Location**: `data/` folder (created automatically)
+
+**Files per participant**:
+- `wsap_data_[ID]_[timestamp].csv` - All trial responses
+- `wsap_summary_[ID]_[timestamp].csv` - Participant statistics
+
+### Main Data File Structure
+```csv
+stimulus,words,labels,response,rt,valence,chosen_word,left_word,right_word,idx_left,is_practice,timestamp
+"You feel weak and your stomach is making noises. You are _____.","['hungry', 'sick']","['benign', 'health-threat']",f,1.234,benign,hungry,hungry,sick,0,False,2024-01-15T14:30:52
+"The waiter brought your ______ to the table.","['appetiser', 'tiger']","['practice0', 'practice1']",j,0.987,practice1,tiger,appetiser,tiger,0,True,2024-01-15T14:25:12
+```
+**Columns**:
+- `stimulus` - The sentence shown to participant
+- `words` - List of the two word options [word1, word2]
+- `labels` - List of valence categories [label1, label2]
+- `response` - Key pressed ('f' for left, 'j' for right, None if timeout)
+- `rt` - Reaction time in seconds (None if timeout)
+- `valence` - Category of chosen word (benign/health-threat/anxiety/dysphoric/positive)
+- `chosen_word` - The actual word participant selected
+- `left_word` - Word displayed on left side
+- `right_word` - Word displayed on right side  
+- `idx_left` - Which original word was on left (0 or 1, for randomization tracking)
+- `is_practice` - True for practice trials, False for main experiment
+- `timestamp` - When trial was completed
+
+
+### Summary File Structure  
+```csv
+participant_id,total_trials,completed_trials,mean_rt,benign_responses,threat_responses,positive_responses,timestamp
+P001,100,98,1.456,45,38,15,20240115_143052
+```
+
+**Columns**:
+- `participant_id` - ID entered at start
+- `total_trials` - Total main trials (should be 100)
+- `completed_trials` - Trials with valid responses (excludes timeouts)
+- `mean_rt` - Average reaction time in seconds
+- `benign_responses` - Count of benign word choices
+- `threat_responses` - Count of health-threat/anxiety/dysphoric choices
+- `positive_responses` - Count of positive word choices  
+- `timestamp` - When experiment completed
+
+
+
+
