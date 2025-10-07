@@ -53,9 +53,6 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var practice_stimuli = [
       { stimulus: "The waiter brought your ______ to the table.", words: ["appetiser", "tiger"], labels: ["practice0", "practice1"] },
       { stimulus: "Micah was volunteering at an animal shelter. The dog he was feeding suddenly bit him. The dog was _____.", words: ["angry", "frightened"], labels: ["practice0", "practice1"] },
-      { stimulus: "An old man is reading the _____.", words: ["newspaper", "table"], labels: ["practice0", "practice1"] },
-      { stimulus: "You are feeling tired from three days of camping. When you get home, you _____.", words: ["sleep", "shower"], labels: ["practice0", "practice1"] },
-      { stimulus: "Yesterday, you hung a picture up on the _____.", words: ["wall", "tree"], labels: ["practice0", "practice1"] },
     ];
     shuffleArray(practice_stimuli);
 
