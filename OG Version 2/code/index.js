@@ -136,13 +136,13 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p><strong>2.</strong> A single word will appear for 0.5 seconds. Please read this word carefully.</p><br>
             <p><strong>3.</strong> An ambiguous sentence will appear. Press the <strong>spacebar</strong> when you have finished reading it.</p><br>
             <p><strong>4.</strong> You will be asked whether the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
-            <p>Press the <strong>"F" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
-            <p>Press the <strong>"J" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
-            <p>Please respond as quickly and accurately as possible.</p><br>
-            <p>There will be 4 practice trials before the main task begins. Please press either the "F" key or the "J" key to proceed.</p><br>
+            <p>Press the <strong>"R" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
+            <p>Press the <strong>"U" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
+            <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded.</p><br>
+            <p>There will be 4 practice trials before the main task begins. Please press either the "R" key or the "U" key to proceed.</p><br>
             </div>
         `,
-      choices: ['f', 'j'],
+      choices: ['r', 'u'],
     };
 
     // Briefing Page
@@ -157,12 +157,12 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p><strong>2.</strong> A single word appears for 0.5 seconds</p><br>
             <p><strong>3.</strong> An ambiguous sentence appears - press <strong>spacebar</strong> when finished reading</p><br>
             <p><strong>4.</strong> Judge if the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong></p><br>
-            <p>Press <strong>"F"</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>"J"</strong> for UNRELATED</p><br>
-            <p>Please complete <strong>all 54 trials</strong>. This task is estimated to take <strong>6-8 minutes</strong>. Please respond as quickly and accurately as possible.</p><br>
-            <p>Press either the "F" key or the "J" key to begin the main task.</p><br>
+            <p>Press <strong>"R"</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>"U"</strong> for UNRELATED</p><br>
+            <p>Please complete <strong>all 54 trials</strong>. This task is estimated to take <strong>6-8 minutes</strong>. Please respond as quickly and accurately as possible. Your reaction times will be recorded.</p><br>
+            <p>Press either the "R" key or the "U" key to begin the main task.</p><br>
             </div>
         `,
-      choices: ['f', 'j'],
+      choices: ['r', 'u'],
     };
 
     // Debriefing Page
@@ -226,15 +226,15 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var relatedness_judgment_practice = {
       type: 'html-keyboard-response',
       stimulus: () => {
-        return '<div style="font-size:20px;font-weight:bold;">' +
-          "<p>Word: <strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
-          "<p>Sentence: <em>" + jsPsych.timelineVariable('sentence') + "</em></p>" +
+        return '<div style="font-size:20px;">' +
+          "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
           "<br><br>" +
-          "<p>Are the word and sentence <strong>RELATED</strong>?</p>" +
-          "<p>Press <strong>F</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>J</strong> for UNRELATED</p>" +
+          "<p><strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
+          "<br><br>" +
+          "<p>Press <strong>R</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>U</strong> for UNRELATED</p>" +
           "</div>"
       },
-      choices: ['f', 'j'],
+      choices: ['r', 'u'],
       post_trial_gap: 500,
       data: {
         task: 'practice_relatedness_judgment',
@@ -243,8 +243,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
         word_type: jsPsych.timelineVariable('word_type')
       },
       on_finish: (data) => {
-        data.response_type = data.response === 'f' ? 'related' : data.response === 'j' ? 'unrelated' : 'no_response';
-        data.endorsement = (data.response === 'f') ? 1 : 0;
+        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'no_response';
+        data.endorsement = (data.response === 'r') ? 1 : 0;
       },
     }
 
@@ -252,15 +252,15 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var relatedness_judgment = {
       type: 'html-keyboard-response',
       stimulus: () => {
-        return '<div style="font-size:20px;font-weight:bold;">' +
-          "<p>Word: <strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
-          "<p>Sentence: <em>" + jsPsych.timelineVariable('sentence') + "</em></p>" +
+        return '<div style="font-size:20px;">' +
+          "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
           "<br><br>" +
-          "<p>Are the word and sentence <strong>RELATED</strong>?</p>" +
-          "<p>Press <strong>F</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>J</strong> for UNRELATED</p>" +
+          "<p><strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
+          "<br><br>" +
+          "<p>Press <strong>R</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>U</strong> for UNRELATED</p>" +
           "</div>"
       },
-      choices: ['f', 'j'],
+      choices: ['r', 'u'],
       post_trial_gap: 500,
       data: {
         task: 'relatedness_judgment',
@@ -270,8 +270,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
         scenario_type: jsPsych.timelineVariable('scenario_type')
       },
       on_finish: (data) => {
-        data.response_type = data.response === 'f' ? 'related' : data.response === 'j' ? 'unrelated' : 'no_response';
-        data.endorsement = (data.response === 'f') ? 1 : 0;
+        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'no_response';
+        data.endorsement = (data.response === 'r') ? 1 : 0;
         // Calculate WSAP indices
         data.benign_endorsed = (data.word_type === 'benign' && data.endorsement === 1) ? 1 : 0;
         data.threat_endorsed = (data.word_type === 'threat' && data.endorsement === 1) ? 1 : 0;
