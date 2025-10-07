@@ -49,15 +49,13 @@ Qualtrics.SurveyEngine.addOnload(function () {
       }
     }
 
-    // Practice Scenarios for the experiment
-    var practice_stimuli = [
+    // Base scenarios for creating word-sentence pairs
+    var base_practice_scenarios = [
       { stimulus: "He noticed that the room door was left open.", words: ["Delay", "Lost"], labels: ["practice0", "practice1"] },
       { stimulus: "She was looking at her phone quietly.", words: ["Waiting", "Reading"], labels: ["practice0", "practice1"] },
     ];
-    shuffleArray(practice_stimuli);
 
-    // Scenarios for the experiment
-    var stimuli = [
+    var base_scenarios = [
       // ANXIETY items
       { stimulus: "The flight attendant announces a flight delay.", words: ["Aircraft maintenance", "Distancing himself"], labels: ["benign", "anxiety"] },
       { stimulus: "People laugh after something you said.", words: ["Funny", "Embarrassing"], labels: ["benign", "anxiety"] },
@@ -91,6 +89,34 @@ Qualtrics.SurveyEngine.addOnload(function () {
       { stimulus: "You receive a call from an unknown number.", words: ["Long-lost friend", "Delivery order"], labels: ["benign", "positive"] },
       { stimulus: "You are entering a rollercoaster ride.", words: ["Adrenaline", "Excitement"], labels: ["benign", "positive"] }
     ];
+
+    // Function to create word-sentence pairs for WSAP
+    function createWordSentencePairs(scenarios) {
+      var pairs = [];
+      scenarios.forEach(function(scenario) {
+        // Create pair for benign word
+        pairs.push({
+          word: scenario.words[0],
+          sentence: scenario.stimulus,
+          word_type: scenario.labels[0],
+          scenario_type: scenario.labels[1]
+        });
+        // Create pair for threat/negative word
+        pairs.push({
+          word: scenario.words[1],
+          sentence: scenario.stimulus,
+          word_type: scenario.labels[0] === "benign" ? "threat" : scenario.labels[1],
+          scenario_type: scenario.labels[1]
+        });
+      });
+      return pairs;
+    }
+
+    // Create WSAP stimuli (word-sentence pairs)
+    var practice_stimuli = createWordSentencePairs(base_practice_scenarios);
+    var stimuli = createWordSentencePairs(base_scenarios);
+    
+    shuffleArray(practice_stimuli);
     shuffleArray(stimuli);
 
     /* EXPERIMENT TIMELINE */
@@ -105,12 +131,15 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <div style="font-size:20px;">
             <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Task.</p><br><br>
             <p style="font-weight:bold;text-decoration:underline;">Instructions</p><br>
-            <p>In this task, a fixation cross ('+') will appear for 0.5 seconds, indicating the start of a trial.</p><br>
-            <p>After 0.5 seconds is up, you will be presented with a sentence. Each sentence will be in a fill-in-the-blank format, like such:</p><br>
-            <p style="font-style:italic;">I am feeling tired. I must be _____.</p><br>
-            <p>Please press the <strong>spacebar</strong> after you have finished reading the sentence. Thereafter, you will be presented with two words below the sentence. Your job is to complete the sentence with the word of your choice, <strong><u>as soon as possible</u></strong>.</p><br>
-            <p>Use the "F" or the "J" keys on your keyboard to indicate the words. Use the <strong>"F" key</strong> to indicate the word on the <strong>left</strong>; use the <strong>"J" key</strong> to indicate the word on the <strong>right</strong>. The word options will only appear for 1.5 seconds before the next trial begins.</p><br>
-            <p>There will be 6 practice trials before the main task begins. Please press either the "F" key or the "J" key to proceed.</p><br>
+            <p>In this task, each trial consists of four steps:</p><br>
+            <p><strong>1.</strong> A fixation cross ('+') will appear for 0.5 seconds to start each trial.</p><br>
+            <p><strong>2.</strong> A single word will appear for 0.5 seconds. Please read this word carefully.</p><br>
+            <p><strong>3.</strong> An ambiguous sentence will appear. Press the <strong>spacebar</strong> when you have finished reading it.</p><br>
+            <p><strong>4.</strong> You will be asked whether the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
+            <p>Press the <strong>"F" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
+            <p>Press the <strong>"J" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
+            <p>Please respond as quickly and accurately as possible.</p><br>
+            <p>There will be 4 practice trials before the main task begins. Please press either the "F" key or the "J" key to proceed.</p><br>
             </div>
         `,
       choices: ['f', 'j'],
@@ -122,13 +151,15 @@ Qualtrics.SurveyEngine.addOnload(function () {
       stimulus: `
             <div style="font-size:20px;">
             <p style="font-weight:bold;">You have completed the practice trials, and will now proceed to the actual Word Sentence Association Paradigm (WSAP) Task.</p><br><br>
-            <p style="font-weight:bold;text-decoration:underline;">Instructions</p><br>
-            <p>In this task, a fixation cross ('+') will appear for 0.5 seconds, indicating the start of a trial.</p><br>
-            <p>After 0.5 seconds is up, you will be presented with a sentence. Each sentence will be in a fill-in-the-blank format, like such:</p><br>
-            <p style="font-style:italic;">I am feeling tired. I must be _____.</p><br>
-            <p>Please press the <strong>spacebar</strong> after you have finished reading the sentence. Thereafter, you will be presented with two words below the sentence. Your job is to complete the sentence with the word of your choice, <strong><u>as soon as possible</u></strong>.</p><br>
-            <p>Use the "F" or the "J" keys on your keyboard to indicate the words. Use the <strong>"F" key</strong> to indicate the word on the <strong>left</strong>; use the <strong>"J" key</strong> to indicate the word on the <strong>right</strong>. The word options will only appear for 1.5 seconds before the next trial begins.</p><br>
-            <p>Please complete <strong>all 27 trials</strong>. This task is estimated to take <strong>4 minutes</strong>. Please press either the "F" key or the "J" key to proceed.</p><br>
+            <p style="font-weight:bold;text-decoration:underline;">Reminder of Instructions</p><br>
+            <p>In each trial:</p><br>
+            <p><strong>1.</strong> A fixation cross ('+') appears for 0.5 seconds</p><br>
+            <p><strong>2.</strong> A single word appears for 0.5 seconds</p><br>
+            <p><strong>3.</strong> An ambiguous sentence appears - press <strong>spacebar</strong> when finished reading</p><br>
+            <p><strong>4.</strong> Judge if the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong></p><br>
+            <p>Press <strong>"F"</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>"J"</strong> for UNRELATED</p><br>
+            <p>Please complete <strong>all 54 trials</strong>. This task is estimated to take <strong>6-8 minutes</strong>. Please respond as quickly and accurately as possible.</p><br>
+            <p>Press either the "F" key or the "J" key to begin the main task.</p><br>
             </div>
         `,
       choices: ['f', 'j'],
@@ -152,91 +183,110 @@ Qualtrics.SurveyEngine.addOnload(function () {
       stimulus: '<div style="font-size:140px;font-weight:bold;">+</div>',
       choices: [],
       trial_duration: 500,
-      post_trial_gap: 500,
+      post_trial_gap: 0,
       data: {
         task: 'fixation',
       },
     };
 
-    // Stimulus page
-    var scenario_page = {
+    // Word presentation trial (500ms display)
+    var word_presentation = {
+      type: 'html-keyboard-response',
+      stimulus: () =>
+        '<div style="font-size:24px;font-weight:bold;">' +
+        jsPsych.timelineVariable('word') +
+        '</div>',
+      choices: [],
+      trial_duration: 500,
+      post_trial_gap: 0,
+      data: {
+        task: 'word_presentation',
+        word: jsPsych.timelineVariable('word'),
+        word_type: jsPsych.timelineVariable('word_type')
+      },
+    };
+
+    // Sentence presentation page (ambiguous sentences without blanks)
+    var sentence_page = {
       type: 'html-keyboard-response',
       stimulus: () =>
         '<div style="font-size:20px;font-weight:bold;">' +
-        "<p>" + jsPsych.timelineVariable('stimulus') + "</p>" +
+        "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
         "<br><br>" +
-        "<p>&nbsp;</p>" +
-        "</div >",
+        "<p>Press spacebar when you have finished reading.</p>" +
+        "</div>",
       choices: [" "],
       data: {
-        task: 'stimulus',
+        task: 'sentence_reading',
+        sentence: jsPsych.timelineVariable('sentence')
       },
     }
 
-    // Stimulus page with words (Practice Trial Version)
-    var scenario_page_words_practice = {
+    // Relatedness judgment task (Practice Version)
+    var relatedness_judgment_practice = {
       type: 'html-keyboard-response',
       stimulus: () => {
-        // Randomize the order of the two words
-        var idx_left = Math.round(Math.random());
-        var idx_right = 1 - idx_left;
         return '<div style="font-size:20px;font-weight:bold;">' +
-          "<p>" + jsPsych.timelineVariable('stimulus') + "</p>" +
+          "<p>Word: <strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
+          "<p>Sentence: <em>" + jsPsych.timelineVariable('sentence') + "</em></p>" +
           "<br><br>" +
-          "<p>" + jsPsych.timelineVariable('words')[idx_left] +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          jsPsych.timelineVariable('words')[idx_right] + "</p>" +
-          "</div >"
+          "<p>Are the word and sentence <strong>RELATED</strong>?</p>" +
+          "<p>Press <strong>F</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>J</strong> for UNRELATED</p>" +
+          "</div>"
       },
       choices: ['f', 'j'],
-      trial_duration: 3000,
       post_trial_gap: 500,
       data: {
-        task: 'practice_response',
-      },
-    }
-
-    // Stimulus page with words
-    var scenario_idx = -1;
-    var scenario_page_words = {
-      type: 'html-keyboard-response',
-      stimulus: () => {
-        // Randomize the order of the two words
-        var idx_left = Math.round(Math.random());
-        var idx_right = 1 - idx_left;
-        scenario_idx = idx_left;
-        return '<div style="font-size:20px;font-weight:bold;">' +
-          "<p>" + jsPsych.timelineVariable('stimulus') + "</p>" +
-          "<br><br>" +
-          "<p>" + jsPsych.timelineVariable('words')[idx_left] +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-          jsPsych.timelineVariable('words')[idx_right] + "</p>" +
-          "</div >"
-      },
-      choices: ['f', 'j'],
-      trial_duration: 3000,
-      post_trial_gap: 500,
-      data: {
-        task: 'response',
-        idx: () => scenario_idx,
-        labels: jsPsych.timelineVariable('labels'),
+        task: 'practice_relatedness_judgment',
+        word: jsPsych.timelineVariable('word'),
+        sentence: jsPsych.timelineVariable('sentence'),
+        word_type: jsPsych.timelineVariable('word_type')
       },
       on_finish: (data) => {
-        // data.idx represents which word was displayed on the left. 
-        // 0 = Left was labels[0], 1 = Left was labels[1]. If -1, there may have been an error running any of the trials.
-        data.valence = data.response === 'f' ? data.labels[data.idx] : data.response === 'j' ? data.labels[1 - data.idx] : "";
+        data.response_type = data.response === 'f' ? 'related' : data.response === 'j' ? 'unrelated' : 'no_response';
+        data.endorsement = (data.response === 'f') ? 1 : 0;
+      },
+    }
+
+    // Relatedness judgment task (Main Experiment)
+    var relatedness_judgment = {
+      type: 'html-keyboard-response',
+      stimulus: () => {
+        return '<div style="font-size:20px;font-weight:bold;">' +
+          "<p>Word: <strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
+          "<p>Sentence: <em>" + jsPsych.timelineVariable('sentence') + "</em></p>" +
+          "<br><br>" +
+          "<p>Are the word and sentence <strong>RELATED</strong>?</p>" +
+          "<p>Press <strong>F</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>J</strong> for UNRELATED</p>" +
+          "</div>"
+      },
+      choices: ['f', 'j'],
+      post_trial_gap: 500,
+      data: {
+        task: 'relatedness_judgment',
+        word: jsPsych.timelineVariable('word'),
+        sentence: jsPsych.timelineVariable('sentence'),
+        word_type: jsPsych.timelineVariable('word_type'),
+        scenario_type: jsPsych.timelineVariable('scenario_type')
+      },
+      on_finish: (data) => {
+        data.response_type = data.response === 'f' ? 'related' : data.response === 'j' ? 'unrelated' : 'no_response';
+        data.endorsement = (data.response === 'f') ? 1 : 0;
+        // Calculate WSAP indices
+        data.benign_endorsed = (data.word_type === 'benign' && data.endorsement === 1) ? 1 : 0;
+        data.threat_endorsed = (data.word_type === 'threat' && data.endorsement === 1) ? 1 : 0;
+        data.benign_rejected = (data.word_type === 'benign' && data.endorsement === 0) ? 1 : 0;
+        data.threat_rejected = (data.word_type === 'threat' && data.endorsement === 0) ? 1 : 0;
       },
     }
 
     var practice_procedure = {
-      timeline: [fixation_cross, scenario_page, scenario_page_words_practice],
+      timeline: [fixation_cross, word_presentation, sentence_page, relatedness_judgment_practice],
       timeline_variables: practice_stimuli
     };
 
     var experiment_procedure = {
-      timeline: [fixation_cross, scenario_page, scenario_page_words],
+      timeline: [fixation_cross, word_presentation, sentence_page, relatedness_judgment],
       timeline_variables: stimuli
     };
 
@@ -254,16 +304,51 @@ Qualtrics.SurveyEngine.addOnload(function () {
       // Adding the clean up and continue functions
       on_finish: function (data) {
 
-        var trials = jsPsych.data.get().filter({ task: 'response' });
-        var data_stimulus = trials.select('stimulus')['values'].toString();
-        var data_response = trials.select('response')['values'].toString();
+        var trials = jsPsych.data.get().filter({ task: 'relatedness_judgment' });
+        
+        // Basic trial data
+        var data_words = trials.select('word')['values'].toString();
+        var data_sentences = trials.select('sentence')['values'].toString();
+        var data_responses = trials.select('response_type')['values'].toString();
         var data_rt = trials.select('rt')['values'].toString();
-        var data_valence = trials.select('valence')['values'].toString();
+        var data_word_types = trials.select('word_type')['values'].toString();
+        var data_scenario_types = trials.select('scenario_type')['values'].toString();
+        
+        // WSAP specific indices
+        var data_endorsements = trials.select('endorsement')['values'].toString();
+        var data_benign_endorsed = trials.select('benign_endorsed')['values'].toString();
+        var data_threat_endorsed = trials.select('threat_endorsed')['values'].toString();
+        var data_benign_rejected = trials.select('benign_rejected')['values'].toString();
+        var data_threat_rejected = trials.select('threat_rejected')['values'].toString();
 
-        Qualtrics.SurveyEngine.setJSEmbeddedData("stimulus", data_stimulus);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("response", data_response);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("reaction_time", data_rt);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("valence", data_valence);
+        // Calculate summary statistics
+        var benign_trials = trials.filter({ word_type: 'benign' });
+        var threat_trials = trials.filter({ word_type: 'threat' });
+        
+        var benign_endorsement_rate = benign_trials.select('endorsement').mean();
+        var threat_endorsement_rate = threat_trials.select('endorsement').mean();
+        
+        var benign_endorse_rt = benign_trials.filter({ endorsement: 1 }).select('rt').mean();
+        var benign_reject_rt = benign_trials.filter({ endorsement: 0 }).select('rt').mean();
+        var threat_endorse_rt = threat_trials.filter({ endorsement: 1 }).select('rt').mean();
+        var threat_reject_rt = threat_trials.filter({ endorsement: 0 }).select('rt').mean();
+
+        // Set embedded data for Qualtrics
+        Qualtrics.SurveyEngine.setJSEmbeddedData("words", data_words);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("sentences", data_sentences);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("responses", data_responses);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("reaction_times", data_rt);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("word_types", data_word_types);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("scenario_types", data_scenario_types);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("endorsements", data_endorsements);
+        
+        // WSAP summary indices
+        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_endorsement_rate", benign_endorsement_rate);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_endorsement_rate", threat_endorsement_rate);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_endorse_rt", benign_endorse_rt);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_reject_rt", benign_reject_rt);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_endorse_rt", threat_endorse_rt);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_reject_rt", threat_reject_rt);
 
         jQuery('#display_stage').remove();
         jQuery('#display_stage_background').remove();
