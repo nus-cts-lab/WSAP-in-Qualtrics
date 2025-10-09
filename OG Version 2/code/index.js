@@ -180,7 +180,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
     // Fixation cross to be used for the experiment
     var fixation_cross = {
       type: 'html-keyboard-response',
-      stimulus: '<div style="font-size:140px;font-weight:bold;">+</div>',
+      stimulus: '<div style="font-size:140px;font-weight:bold;text-align:center;">+</div>',
       choices: [],
       trial_duration: 500,
       post_trial_gap: 0,
@@ -210,7 +210,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var sentence_page = {
       type: 'html-keyboard-response',
       stimulus: () =>
-        '<div style="font-size:20px;font-weight:bold;">' +
+        '<div style="font-size:20px;text-align:center;">' +
         "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
         "<br><br>" +
         "<p>Press spacebar when you have finished reading.</p>" +
@@ -226,7 +226,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var relatedness_judgment_practice = {
       type: 'html-keyboard-response',
       stimulus: () => {
-        return '<div style="font-size:20px;">' +
+        return '<div style="font-size:20px;text-align:center;">' +
           "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
           "<br><br>" +
           "<p><strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
@@ -252,7 +252,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var relatedness_judgment = {
       type: 'html-keyboard-response',
       stimulus: () => {
-        return '<div style="font-size:20px;">' +
+        return '<div style="font-size:20px;text-align:center;">' +
           "<p>" + jsPsych.timelineVariable('sentence') + "</p>" +
           "<br><br>" +
           "<p><strong>" + jsPsych.timelineVariable('word') + "</strong></p>" +
@@ -281,12 +281,12 @@ Qualtrics.SurveyEngine.addOnload(function () {
     }
 
     var practice_procedure = {
-      timeline: [fixation_cross, word_presentation, sentence_page, relatedness_judgment_practice],
+      timeline: [fixation_cross, sentence_page, relatedness_judgment_practice],
       timeline_variables: practice_stimuli
     };
 
     var experiment_procedure = {
-      timeline: [fixation_cross, word_presentation, sentence_page, relatedness_judgment],
+      timeline: [fixation_cross, sentence_page, relatedness_judgment],
       timeline_variables: stimuli
     };
 
