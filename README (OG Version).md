@@ -92,16 +92,26 @@ This will be the result of clicking on **"Embedded Data"**.
 
 ![alt text](assets/17.PNG)
 
-Here, what you need to do is to create 4 separate data entries named:
+Here, what you need to do is to create the following data entries for the WSAP task:
 
-* `__js_reaction_time`
-* `__js_valence`
-* `__js_stimulus`
-* `__js_response`
+**Basic Trial Data:**
+* `words` - The word presented in each trial
+* `sentences` - The sentence presented in each trial  
+* `responses` - Participant responses (related/unrelated)
+* `reaction_times` - Response times for each trial
+* `word_types` - Word type classification (benign/threat)
+* `scenario_types` - Scenario categories (anxiety/depression/positive)
+* `endorsements` - Binary endorsement data (1=related, 0=unrelated)
 
-(Note: It is two underscores followed by "js", and then one more underscore, and then the names.)
+**WSAP Summary Indices:**
+* `benign_endorsement_rate` - Percentage of benign interpretations endorsed
+* `threat_endorsement_rate` - Percentage of threat interpretations endorsed
+* `benign_endorse_rt` - Average RT to endorse benign interpretations
+* `benign_reject_rt` - Average RT to reject benign interpretations
+* `threat_endorse_rt` - Average RT to endorse threat interpretations
+* `threat_reject_rt` - Average RT to reject threat interpretations
 
-When you do this, Qualtrics will automatically log these data, and it will be accessible throughits `.csv` data file export. After you have included all 4, it should look like this.
+When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. These variables capture the standard WSAP indices described by Beard and Amir (2008; 2009).
 
 ![alt text](assets/18.PNG)
 

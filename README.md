@@ -1,4 +1,4 @@
-# WSAP-in-Qualtrics
+# WSAP-in-Qualtrics-Modern-Version / Old-Version
 
 This repository contains the instructions and the relevant code snippets for the Word-Sentence Association Paradigm (WSAP) task, to be embedded into Qualtrics.
 
@@ -8,7 +8,7 @@ This is a streamlined version of the [full guide](https://lhw-1.github.io/jsPsyc
 
 If you wish to customize your WSAP task (e.g. change the stimuli / fixation cross / durations), refer to the **Advanced Instructions** Section below.
 
-For any questions, please open new issues on this repository - and if you wish to contribute to the documentation / fix any errors, feel free to make a pull request. 
+For any questions, please open new issues on this repository - and if you wish to contribute to the documentation / fix any errors, feel free to make a pull request.
 
 Thanks!
 
@@ -16,7 +16,7 @@ Thanks!
 
 ## Embedding Instructions
 
-The WSAP task (or actually, any valid & compatible task written in jsPsych) can be embedded into a Qualtrics survey just like another set of questionnaire. 
+The WSAP task (or actually, any valid & compatible task written in jsPsych) can be embedded into a Qualtrics survey just like another set of questionnaire.
 
 ### Adding the Task as a Question
 
@@ -66,7 +66,7 @@ Delete all the code in here, copy-and-paste the code in `code/index.js` into thi
 
 ![alt text](assets/11.PNG)
 
-The code has been embedded successfully! 
+The code has been embedded successfully!
 
 ### Adding the Embedded Data
 
@@ -94,28 +94,14 @@ This will be the result of clicking on **"Embedded Data"**.
 
 ![alt text](assets/17.PNG)
 
-Here, what you need to do is to create the following data entries for the WSAP task:
+Here, what you need to do is to create 4 separate data entries named:
 
-**Basic Trial Data:**
-* `__js_words` - The word presented in each trial
-* `__js_sentences` - The sentence presented in each trial  
-* `__js_responses` - Participant responses (related/unrelated)
-* `__js_reaction_times` - Response times for each trial
-* `__js_word_types` - Word type classification (benign/threat)
-* `__js_scenario_types` - Scenario categories (anxiety/depression/positive)
-* `__js_endorsements` - Binary endorsement data (1=related, 0=unrelated)
+- `stimulus`
+- `response`
+- `reaction_time`
+- `valence`
 
-**WSAP Summary Indices:**
-* `__js_benign_endorsement_rate` - Percentage of benign interpretations endorsed
-* `__js_threat_endorsement_rate` - Percentage of threat interpretations endorsed
-* `__js_benign_endorse_rt` - Average RT to endorse benign interpretations
-* `__js_benign_reject_rt` - Average RT to reject benign interpretations
-* `__js_threat_endorse_rt` - Average RT to endorse threat interpretations
-* `__js_threat_reject_rt` - Average RT to reject threat interpretations
-
-(Note: It is two underscores followed by "js", and then one more underscore, and then the variable names.)
-
-When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. These variables capture the standard WSAP indices described by Beard and Amir (2008; 2009).
+When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. After you have included all 4, it should look like this.
 
 ![alt text](assets/18.PNG)
 
@@ -164,8 +150,9 @@ Each scenario is defined as follows:
 ```
 
 The code automatically creates word-sentence pairs from these base scenarios. For each scenario:
+
 - **stimulus**: The ambiguous sentence (no blanks needed)
-- **words**: Array with [benign_word, threat_word]  
+- **words**: Array with [benign_word, threat_word]
 - **labels**: Array with [word_type, scenario_category]
 
 This will generate 2 trials per scenario (one for each word), creating 54 total trials from 27 base scenarios.
