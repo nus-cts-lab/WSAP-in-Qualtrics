@@ -1,4 +1,4 @@
-# WSAP-in-Qualtrics
+# WSAP-in-Qualtrics-OG-VERSION
 
 This repository contains the instructions and the relevant code snippets for the Word-Sentence Association Paradigm (WSAP) task, to be embedded into Qualtrics.
 
@@ -6,7 +6,7 @@ This is a streamlined version of the [full guide](https://lhw-1.github.io/jsPsyc
 
 If you wish to customize your WSAP task (e.g. change the stimuli / fixation cross / durations), refer to the **Advanced Instructions** Section below.
 
-For any questions, please open new issues on this repository - and if you wish to contribute to the documentation / fix any errors, feel free to make a pull request. 
+For any questions, please open new issues on this repository - and if you wish to contribute to the documentation / fix any errors, feel free to make a pull request.
 
 Thanks!
 
@@ -14,7 +14,7 @@ Thanks!
 
 ## Embedding Instructions
 
-The WSAP task (or actually, any valid & compatible task written in jsPsych) can be embedded into a Qualtrics survey just like another set of questionnaire. 
+The WSAP task (or actually, any valid & compatible task written in jsPsych) can be embedded into a Qualtrics survey just like another set of questionnaire.
 
 ### Adding the Task as a Question
 
@@ -64,7 +64,7 @@ Delete all the code in here, copy-and-paste the code in `code/index.js` into thi
 
 ![alt text](assets/11.PNG)
 
-The code has been embedded successfully! 
+The code has been embedded successfully!
 
 ### Adding the Embedded Data
 
@@ -95,21 +95,25 @@ This will be the result of clicking on **"Embedded Data"**.
 Here, what you need to do is to create the following data entries for the WSAP task:
 
 **Basic Trial Data:**
-* `words` - The word presented in each trial
-* `sentences` - The sentence presented in each trial  
-* `responses` - Participant responses (related/unrelated)
-* `reaction_times` - Response times for each trial
-* `word_types` - Word type classification (benign/threat)
-* `scenario_types` - Scenario categories (anxiety/depression/positive)
-* `endorsements` - Binary endorsement data (1=related, 0=unrelated)
+
+- `words` - The word presented in each trial
+- `sentences` - The sentence presented in each trial
+- `responses` - Participant responses (related/unrelated)
+- `reaction_times` - Response times for each trial
+- `word_types` - Word type classification (benign/threat)
+- `scenario_types` - Scenario categories (anxiety/depression/positive)
+- `endorsements` - Binary endorsement data (1=related, 0=unrelated)
 
 **WSAP Summary Indices:**
-* `benign_endorsement_rate` - Percentage of benign interpretations endorsed
-* `threat_endorsement_rate` - Percentage of threat interpretations endorsed
-* `benign_endorse_rt` - Average RT to endorse benign interpretations
-* `benign_reject_rt` - Average RT to reject benign interpretations
-* `threat_endorse_rt` - Average RT to endorse threat interpretations
-* `threat_reject_rt` - Average RT to reject threat interpretations
+
+- `benign_endorsement_rate` - Percentage of benign interpretations endorsed
+- `threat_endorsement_rate` - Percentage of threat interpretations endorsed
+- `benign_endorse_rt` - Average RT to endorse benign interpretations
+- `benign_reject_rt` - Average RT to reject benign interpretations
+- `threat_endorse_rt` - Average RT to endorse threat interpretations
+- `threat_reject_rt` - Average RT to reject threat interpretations
+
+**IMPORTANT**: Make sure to create ALL 13 embedded data fields listed above in your Qualtrics survey flow. The task will not save data properly if any of these fields are missing from your embedded data setup.
 
 When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. These variables capture the standard WSAP indices described by Beard and Amir (2008; 2009).
 

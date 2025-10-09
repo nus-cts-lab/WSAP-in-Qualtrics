@@ -269,15 +269,6 @@ Qualtrics.SurveyEngine.addOnload(function () {
         word_type: jsPsych.timelineVariable('word_type'),
         scenario_type: jsPsych.timelineVariable('scenario_type')
       },
-      on_finish: (data) => {
-        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'no_response';
-        data.endorsement = (data.response === 'r') ? 1 : 0;
-        // Calculate WSAP indices
-        data.benign_endorsed = (data.word_type === 'benign' && data.endorsement === 1) ? 1 : 0;
-        data.threat_endorsed = (data.word_type === 'threat' && data.endorsement === 1) ? 1 : 0;
-        data.benign_rejected = (data.word_type === 'benign' && data.endorsement === 0) ? 1 : 0;
-        data.threat_rejected = (data.word_type === 'threat' && data.endorsement === 0) ? 1 : 0;
-      },
     }
 
     var practice_procedure = {
@@ -306,32 +297,61 @@ Qualtrics.SurveyEngine.addOnload(function () {
 
         var trials = jsPsych.data.get().filter({ task: 'relatedness_judgment' });
         
-        // Basic trial data
+        // Basic trial data - collect raw data first
         var data_words = trials.select('word')['values'].toString();
         var data_sentences = trials.select('sentence')['values'].toString();
-        var data_responses = trials.select('response_type')['values'].toString();
         var data_rt = trials.select('rt')['values'].toString();
         var data_word_types = trials.select('word_type')['values'].toString();
         var data_scenario_types = trials.select('scenario_type')['values'].toString();
         
-        // WSAP specific indices
-        var data_endorsements = trials.select('endorsement')['values'].toString();
-        var data_benign_endorsed = trials.select('benign_endorsed')['values'].toString();
-        var data_threat_endorsed = trials.select('threat_endorsed')['values'].toString();
-        var data_benign_rejected = trials.select('benign_rejected')['values'].toString();
-        var data_threat_rejected = trials.select('threat_rejected')['values'].toString();
+        // Calculate derived fields from raw response data
+        var raw_responses = trials.select('response')['values'];
+        var response_types = raw_responses.map(r => r === 'r' ? 'related' : r === 'u' ? 'unrelated' : 'no_response');
+        var endorsements = raw_responses.map(r => r === 'r' ? 1 : 0);
+        
+        var data_responses = response_types.toString();
+        var data_endorsements = endorsements.toString();
+        
+        // Calculate WSAP indices using raw data
+        var word_types = trials.select('word_type')['values'];
+        var benign_endorsed = [];
+        var threat_endorsed = [];
+        var benign_rejected = [];
+        var threat_rejected = [];
+        
+        for (let i = 0; i < endorsements.length; i++) {
+          benign_endorsed.push((word_types[i] === 'benign' && endorsements[i] === 1) ? 1 : 0);
+          threat_endorsed.push((word_types[i] === 'threat' && endorsements[i] === 1) ? 1 : 0);
+          benign_rejected.push((word_types[i] === 'benign' && endorsements[i] === 0) ? 1 : 0);
+          threat_rejected.push((word_types[i] === 'threat' && endorsements[i] === 0) ? 1 : 0);
+        }
+        
+        var data_benign_endorsed = benign_endorsed.toString();
+        var data_threat_endorsed = threat_endorsed.toString();
+        var data_benign_rejected = benign_rejected.toString();
+        var data_threat_rejected = threat_rejected.toString();
 
-        // Calculate summary statistics
-        var benign_trials = trials.filter({ word_type: 'benign' });
-        var threat_trials = trials.filter({ word_type: 'threat' });
+        // Calculate summary statistics using arrays
+        var benign_indices = word_types.map((type, index) => type === 'benign' ? index : -1).filter(i => i !== -1);
+        var threat_indices = word_types.map((type, index) => type === 'threat' ? index : -1).filter(i => i !== -1);
         
-        var benign_endorsement_rate = benign_trials.select('endorsement').mean();
-        var threat_endorsement_rate = threat_trials.select('endorsement').mean();
+        var benign_endorsements = benign_indices.map(i => endorsements[i]);
+        var threat_endorsements = threat_indices.map(i => endorsements[i]);
+        var benign_rts = benign_indices.map(i => trials.select('rt')['values'][i]);
+        var threat_rts = threat_indices.map(i => trials.select('rt')['values'][i]);
         
-        var benign_endorse_rt = benign_trials.filter({ endorsement: 1 }).select('rt').mean();
-        var benign_reject_rt = benign_trials.filter({ endorsement: 0 }).select('rt').mean();
-        var threat_endorse_rt = threat_trials.filter({ endorsement: 1 }).select('rt').mean();
-        var threat_reject_rt = threat_trials.filter({ endorsement: 0 }).select('rt').mean();
+        var benign_endorsement_rate = benign_endorsements.reduce((a, b) => a + b, 0) / benign_endorsements.length;
+        var threat_endorsement_rate = threat_endorsements.reduce((a, b) => a + b, 0) / threat_endorsements.length;
+        
+        var benign_endorse_rts = benign_indices.filter(i => endorsements[i] === 1).map(i => trials.select('rt')['values'][i]);
+        var benign_reject_rts = benign_indices.filter(i => endorsements[i] === 0).map(i => trials.select('rt')['values'][i]);
+        var threat_endorse_rts = threat_indices.filter(i => endorsements[i] === 1).map(i => trials.select('rt')['values'][i]);
+        var threat_reject_rts = threat_indices.filter(i => endorsements[i] === 0).map(i => trials.select('rt')['values'][i]);
+        
+        var benign_endorse_rt = benign_endorse_rts.length > 0 ? benign_endorse_rts.reduce((a, b) => a + b, 0) / benign_endorse_rts.length : null;
+        var benign_reject_rt = benign_reject_rts.length > 0 ? benign_reject_rts.reduce((a, b) => a + b, 0) / benign_reject_rts.length : null;
+        var threat_endorse_rt = threat_endorse_rts.length > 0 ? threat_endorse_rts.reduce((a, b) => a + b, 0) / threat_endorse_rts.length : null;
+        var threat_reject_rt = threat_reject_rts.length > 0 ? threat_reject_rts.reduce((a, b) => a + b, 0) / threat_reject_rts.length : null;
 
         // Set embedded data for Qualtrics
         Qualtrics.SurveyEngine.setJSEmbeddedData("words", data_words);
