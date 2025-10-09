@@ -92,30 +92,20 @@ This will be the result of clicking on **"Embedded Data"**.
 
 ![alt text](assets/17.PNG)
 
-Here, what you need to do is to create the following data entries for the WSAP task:
+Here, what you need to do is to create the following 6 data entries for the WSAP task:
 
-**Basic Trial Data:**
+**Raw Trial Data:**
 
 - `words` - The word presented in each trial
 - `sentences` - The sentence presented in each trial
-- `responses` - Participant responses (related/unrelated)
-- `reaction_times` - Response times for each trial
-- `word_types` - Word type classification (benign/threat)
-- `scenario_types` - Scenario categories (anxiety/depression/positive)
-- `endorsements` - Binary endorsement data (1=related, 0=unrelated)
+- `responses` - Raw participant responses ('r' for related, 'u' for unrelated)
+- `reaction_times` - Response times for each trial (in milliseconds)
+- `word_types` - Word type classification ('benign' or 'threat')
+- `scenario_types` - Scenario categories ('anxiety', 'depression', or 'positive')
 
-**WSAP Summary Indices:**
+**IMPORTANT**: Create exactly these 6 embedded data fields in your Qualtrics survey flow. Each field will contain comma-separated values for all 54 trials.
 
-- `benign_endorsement_rate` - Percentage of benign interpretations endorsed
-- `threat_endorsement_rate` - Percentage of threat interpretations endorsed
-- `benign_endorse_rt` - Average RT to endorse benign interpretations
-- `benign_reject_rt` - Average RT to reject benign interpretations
-- `threat_endorse_rt` - Average RT to endorse threat interpretations
-- `threat_reject_rt` - Average RT to reject threat interpretations
-
-**IMPORTANT**: Make sure to create ALL 13 embedded data fields listed above in your Qualtrics survey flow. The task will not save data properly if any of these fields are missing from your embedded data setup.
-
-When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. These variables capture the standard WSAP indices described by Beard and Amir (2008; 2009).
+When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export.
 
 ![alt text](assets/18.PNG)
 
@@ -156,5 +146,27 @@ Here, you may notice that each of the stimuli are defined as follows:
 ```
 
 Follow the format, and add in any new stimuli / replace the old stimuli as needed for your task. The two labels will correspond to the words provided (e.g. in the example above, "benign" corresponds to "fine", and "health-threat" corresponds to "ill").
+
+## Calculating WSAP Indices from Raw Data
+
+The task now collects raw data only. To calculate the standard WSAP indices from your exported data, use these formulas:
+
+### Basic Conversions:
+- **Endorsement**: `responses` = 'r' → 1, 'u' → 0
+- **Response Type**: `responses` = 'r' → 'related', 'u' → 'unrelated'
+
+### WSAP Core Indices:
+- **Benign Endorsement Rate**: (Count of 'r' responses where `word_types` = 'benign') / (Total 'benign' trials)
+- **Threat Endorsement Rate**: (Count of 'r' responses where `word_types` = 'threat') / (Total 'threat' trials)
+
+### Reaction Time Indices:
+- **Benign Endorse RT**: Average `reaction_times` for trials where `word_types` = 'benign' AND `responses` = 'r'
+- **Benign Reject RT**: Average `reaction_times` for trials where `word_types` = 'benign' AND `responses` = 'u'
+- **Threat Endorse RT**: Average `reaction_times` for trials where `word_types` = 'threat' AND `responses` = 'r'
+- **Threat Reject RT**: Average `reaction_times` for trials where `word_types` = 'threat' AND `responses` = 'u'
+
+These indices capture the standard WSAP measures described by Beard and Amir (2008; 2009).
+
+### Customizing Instructions
 
 Another use case may be to change the wording of the instructions. In this case, you may scroll down to find the sections that contain the instruction wordings, and change them accordingly. You may find that having some **basic knowledge of HTML, CSS, and JavaScript** might be helpful to ensure that no errors occur when changing the strings directly, though.
