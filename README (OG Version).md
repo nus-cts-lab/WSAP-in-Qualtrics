@@ -10,8 +10,6 @@ For any questions, please open new issues on this repository - and if you wish t
 
 Thanks!
 
-~ Hyungwoon ([@lhw-1](https://github.com/lhw-1))
-
 ## Embedding Instructions
 
 The WSAP task (or actually, any valid & compatible task written in jsPsych) can be embedded into a Qualtrics survey just like another set of questionnaire.
@@ -152,14 +150,17 @@ Follow the format, and add in any new stimuli / replace the old stimuli as neede
 The task now collects raw data only. To calculate the standard WSAP indices from your exported data, use these formulas:
 
 ### Basic Conversions:
+
 - **Endorsement**: `responses` = 'r' → 1, 'u' → 0
 - **Response Type**: `responses` = 'r' → 'related', 'u' → 'unrelated'
 
 ### WSAP Core Indices:
+
 - **Benign Endorsement Rate**: (Count of 'r' responses where `word_types` = 'benign') / (Total 'benign' trials)
 - **Threat Endorsement Rate**: (Count of 'r' responses where `word_types` = 'threat') / (Total 'threat' trials)
 
 ### Reaction Time Indices:
+
 - **Benign Endorse RT**: Average `reaction_times` for trials where `word_types` = 'benign' AND `responses` = 'r'
 - **Benign Reject RT**: Average `reaction_times` for trials where `word_types` = 'benign' AND `responses` = 'u'
 - **Threat Endorse RT**: Average `reaction_times` for trials where `word_types` = 'threat' AND `responses` = 'r'

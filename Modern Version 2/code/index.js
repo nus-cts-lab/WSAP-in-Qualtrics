@@ -103,7 +103,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
       type: "html-keyboard-response",
       stimulus: `
             <div style="font-size:20px;">
-            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Task.</p><br><br>
+            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Modern Task.</p><br><br>
             <p style="font-weight:bold;text-decoration:underline;">Instructions</p><br>
             <p>In this task, a fixation cross ('+') will appear for 0.5 seconds, indicating the start of a trial.</p><br>
             <p>After 0.5 seconds is up, you will be presented with a sentence. Each sentence will be in a fill-in-the-blank format, like such:</p><br>

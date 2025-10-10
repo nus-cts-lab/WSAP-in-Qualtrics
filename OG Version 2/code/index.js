@@ -129,13 +129,12 @@ Qualtrics.SurveyEngine.addOnload(function () {
       type: "html-keyboard-response",
       stimulus: `
             <div style="font-size:20px;">
-            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Task.</p><br><br>
+            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Original Task.</p><br><br>
             <p style="font-weight:bold;text-decoration:underline;">Instructions</p><br>
-            <p>In this task, each trial consists of four steps:</p><br>
+            <p>In this task, each trial consists of three steps:</p><br>
             <p><strong>1.</strong> A fixation cross ('+') will appear for 0.5 seconds to start each trial.</p><br>
-            <p><strong>2.</strong> A single word will appear for 0.5 seconds. Please read this word carefully.</p><br>
-            <p><strong>3.</strong> An ambiguous sentence will appear. Press the <strong>spacebar</strong> when you have finished reading it.</p><br>
-            <p><strong>4.</strong> You will be asked whether the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
+            <p><strong>2.</strong> An ambiguous sentence will appear. Press the <strong>spacebar</strong> when you have finished reading it.</p><br>
+            <p><strong>3.</strong> You will be asked whether a word and the sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
             <p>Press the <strong>"R" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
             <p>Press the <strong>"U" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
             <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded.</p><br>
@@ -154,9 +153,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p style="font-weight:bold;text-decoration:underline;">Reminder of Instructions</p><br>
             <p>In each trial:</p><br>
             <p><strong>1.</strong> A fixation cross ('+') appears for 0.5 seconds</p><br>
-            <p><strong>2.</strong> A single word appears for 0.5 seconds</p><br>
-            <p><strong>3.</strong> An ambiguous sentence appears - press <strong>spacebar</strong> when finished reading</p><br>
-            <p><strong>4.</strong> Judge if the word and sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong></p><br>
+            <p><strong>2.</strong> An ambiguous sentence appears - press <strong>spacebar</strong> when finished reading</p><br>
+            <p><strong>3.</strong> Judge if a word and the sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong></p><br>
             <p>Press <strong>"R"</strong> for RELATED &nbsp;&nbsp;&nbsp;&nbsp; Press <strong>"U"</strong> for UNRELATED</p><br>
             <p>Please complete <strong>all 54 trials</strong>. This task is estimated to take <strong>6-8 minutes</strong>. Please respond as quickly and accurately as possible. Your reaction times will be recorded.</p><br>
             <p>Press either the "R" key or the "U" key to begin the main task.</p><br>
@@ -189,22 +187,6 @@ Qualtrics.SurveyEngine.addOnload(function () {
       },
     };
 
-    // Word presentation trial (500ms display)
-    var word_presentation = {
-      type: 'html-keyboard-response',
-      stimulus: () =>
-        '<div style="font-size:24px;font-weight:bold;">' +
-        jsPsych.timelineVariable('word') +
-        '</div>',
-      choices: [],
-      trial_duration: 500,
-      post_trial_gap: 0,
-      data: {
-        task: 'word_presentation',
-        word: jsPsych.timelineVariable('word'),
-        word_type: jsPsych.timelineVariable('word_type')
-      },
-    };
 
     // Sentence presentation page (ambiguous sentences without blanks)
     var sentence_page = {
@@ -242,10 +224,6 @@ Qualtrics.SurveyEngine.addOnload(function () {
         sentence: jsPsych.timelineVariable('sentence'),
         word_type: jsPsych.timelineVariable('word_type')
       },
-      on_finish: (data) => {
-        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'no_response';
-        data.endorsement = (data.response === 'r') ? 1 : 0;
-      },
     }
 
     // Relatedness judgment task (Main Experiment)
@@ -268,15 +246,6 @@ Qualtrics.SurveyEngine.addOnload(function () {
         sentence: jsPsych.timelineVariable('sentence'),
         word_type: jsPsych.timelineVariable('word_type'),
         scenario_type: jsPsych.timelineVariable('scenario_type')
-      },
-      on_finish: (data) => {
-        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'no_response';
-        data.endorsement = (data.response === 'r') ? 1 : 0;
-        // Calculate WSAP indices
-        data.benign_endorsed = (data.word_type === 'benign' && data.endorsement === 1) ? 1 : 0;
-        data.threat_endorsed = (data.word_type === 'threat' && data.endorsement === 1) ? 1 : 0;
-        data.benign_rejected = (data.word_type === 'benign' && data.endorsement === 0) ? 1 : 0;
-        data.threat_rejected = (data.word_type === 'threat' && data.endorsement === 0) ? 1 : 0;
       },
     }
 
@@ -306,49 +275,21 @@ Qualtrics.SurveyEngine.addOnload(function () {
 
         var trials = jsPsych.data.get().filter({ task: 'relatedness_judgment' });
         
-        // Basic trial data
-        var data_words = trials.select('word')['values'].toString();
+        // Collect only raw data - no calculations or transformations
         var data_sentences = trials.select('sentence')['values'].toString();
-        var data_responses = trials.select('response_type')['values'].toString();
-        var data_rt = trials.select('rt')['values'].toString();
+        var data_words = trials.select('word')['values'].toString();
         var data_word_types = trials.select('word_type')['values'].toString();
+        var data_responses = trials.select('response')['values'].toString();
+        var data_rt = trials.select('rt')['values'].toString();
         var data_scenario_types = trials.select('scenario_type')['values'].toString();
-        
-        // WSAP specific indices
-        var data_endorsements = trials.select('endorsement')['values'].toString();
-        var data_benign_endorsed = trials.select('benign_endorsed')['values'].toString();
-        var data_threat_endorsed = trials.select('threat_endorsed')['values'].toString();
-        var data_benign_rejected = trials.select('benign_rejected')['values'].toString();
-        var data_threat_rejected = trials.select('threat_rejected')['values'].toString();
 
-        // Calculate summary statistics
-        var benign_trials = trials.filter({ word_type: 'benign' });
-        var threat_trials = trials.filter({ word_type: 'threat' });
-        
-        var benign_endorsement_rate = benign_trials.select('endorsement').mean();
-        var threat_endorsement_rate = threat_trials.select('endorsement').mean();
-        
-        var benign_endorse_rt = benign_trials.filter({ endorsement: 1 }).select('rt').mean();
-        var benign_reject_rt = benign_trials.filter({ endorsement: 0 }).select('rt').mean();
-        var threat_endorse_rt = threat_trials.filter({ endorsement: 1 }).select('rt').mean();
-        var threat_reject_rt = threat_trials.filter({ endorsement: 0 }).select('rt').mean();
-
-        // Set embedded data for Qualtrics
-        Qualtrics.SurveyEngine.setJSEmbeddedData("words", data_words);
+        // Set embedded data for Qualtrics - only raw fields
         Qualtrics.SurveyEngine.setJSEmbeddedData("sentences", data_sentences);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("words", data_words);
+        Qualtrics.SurveyEngine.setJSEmbeddedData("word_types", data_word_types);
         Qualtrics.SurveyEngine.setJSEmbeddedData("responses", data_responses);
         Qualtrics.SurveyEngine.setJSEmbeddedData("reaction_times", data_rt);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("word_types", data_word_types);
         Qualtrics.SurveyEngine.setJSEmbeddedData("scenario_types", data_scenario_types);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("endorsements", data_endorsements);
-        
-        // WSAP summary indices
-        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_endorsement_rate", benign_endorsement_rate);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_endorsement_rate", threat_endorsement_rate);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_endorse_rt", benign_endorse_rt);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("benign_reject_rt", benign_reject_rt);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_endorse_rt", threat_endorse_rt);
-        Qualtrics.SurveyEngine.setJSEmbeddedData("threat_reject_rt", threat_reject_rt);
 
         jQuery('#display_stage').remove();
         jQuery('#display_stage_background').remove();
