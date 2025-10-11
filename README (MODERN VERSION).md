@@ -1,8 +1,6 @@
-# WSAP-in-Qualtrics-Modern-Version / Old-Version
+# WSAP-in-Qualtrics Modern / Old Version
 
 This repository contains the instructions and the relevant code snippets for the Word-Sentence Association Paradigm (WSAP) task, to be embedded into Qualtrics.
-
-**Important**: This implementation follows the authentic WSAP methodology described by Beard and Amir (2008; 2009), where participants judge the relatedness between individual words and ambiguous sentences, rather than selecting between interpretations. The task measures interpretation bias through endorsement rates and reaction times for benign vs. threat interpretations.
 
 This is a streamlined version of the [full guide](https://lhw-1.github.io/jsPsych-in-Qualtrics) on creating a jsPsych Experiment to be embedded into Qualtrics (which is not yet up, but the repository can be accessed [here](https://github.com/nus-cts-lab/jsPsych-in-Qualtrics) if you have permission). In order to include the WSAP task into a Qualtrics survey, please follow the steps below!
 
@@ -96,12 +94,14 @@ This will be the result of clicking on **"Embedded Data"**.
 
 Here, what you need to do is to create 4 separate data entries named:
 
-- `stimulus`
-- `response`
-- `reaction_time`
-- `valence`
+- `__js_reaction_time`
+- `__js_valence`
+- `__js_stimulus`
+- `__js_response`
 
-When you do this, Qualtrics will automatically log these data, and it will be accessible through its `.csv` data file export. After you have included all 4, it should look like this.
+(Note: It is two underscores followed by "js", and then one more underscore, and then the names.)
+
+When you do this, Qualtrics will automatically log these data, and it will be accessible throughits `.csv` data file export. After you have included all 4, it should look like this.
 
 ![alt text](assets/18.PNG)
 
@@ -117,52 +117,30 @@ And you're all set! Head back to the survey tab, and publish the survey.
 
 The code for the WSAP task is contained inside `code/index.js` file.
 
-### Understanding the WSAP Paradigm
-
-This implementation follows the authentic Word-Sentence Association Paradigm (WSAP) described by Beard and Amir (2008; 2009). Each trial consists of four steps:
-
-1. **Fixation cross** (500ms) - Alerts participant that trial is starting
-2. **Word presentation** (500ms) - Single word appears (benign or threat interpretation)
-3. **Sentence presentation** - Ambiguous sentence appears, participant presses spacebar when finished reading
-4. **Relatedness judgment** - Participant judges if the word and sentence are related (F=related, J=unrelated)
-
-The task measures interpretation bias through endorsement rates and reaction times for benign vs. threat interpretations.
-
-### Customizing Stimuli
-
-To change the stimuli, look for the section with the following comments:
+The most common advanced use case might be to change the stimuli. To do this, go into the code, and look for the section with the following comments:
 
 ```js
-// Base scenarios for creating word-sentence pairs
-var base_practice_scenarios = [
+// Practice Scenarios for the experiment
+var practice_stimuli = [
   ...
 ];
+shuffleArray(practice_stimuli);
 
-var base_scenarios = [
+// Scenarios for the experiment
+var stimuli = [
   ...
 ];
+shuffleArray(stimuli);
 ```
 
-Each scenario is defined as follows:
+This should be at Line 52 onwards, if using the file directly provided in this repository.
+
+Here, you may notice that each of the stimuli are defined as follows:
 
 ```js
-{ stimulus: "You hear a noise in the night.", words: ["Dog", "Robbery"], labels: ["benign", "anxiety"] },
+{ stimulus: "You have made an appointment to see your doctor to discuss your test results. You think the results will probably show you are _____.", words: ["fine", "ill"], labels: ["benign", "health-threat"] },
 ```
 
-The code automatically creates word-sentence pairs from these base scenarios. For each scenario:
+Follow the format, and add in any new stimuli / replace the old stimuli as needed for your task. The two labels will correspond to the words provided (e.g. in the example above, "benign" corresponds to "fine", and "health-threat" corresponds to "ill").
 
-- **stimulus**: The ambiguous sentence (no blanks needed)
-- **words**: Array with [benign_word, threat_word]
-- **labels**: Array with [word_type, scenario_category]
-
-This will generate 2 trials per scenario (one for each word), creating 54 total trials from 27 base scenarios.
-
-### Trial Structure
-
-- **Practice**: 4 trials (2 scenarios × 2 words each)
-- **Main Task**: 54 trials (27 scenarios × 2 words each)
-- **Duration**: Approximately 6-8 minutes
-
-### Customizing Instructions
-
-To modify the task instructions, find the `welcome` and `briefing` variables in the code. You may find that having some **basic knowledge of HTML, CSS, and JavaScript** will be helpful when modifying the instruction text.
+Another use case may be to change the wording of the instructions. In this case, you may scroll down to find the sections that contain the instruction wordings, and change them accordingly. You may find that having some **basic knowledge of HTML, CSS, and JavaScript** might be helpful to ensure that no errors occur when changing the strings directly, though.

@@ -94,12 +94,14 @@ Here, what you need to do is to create the following 6 data entries for the WSAP
 
 **Raw Trial Data:**
 
-- `words` - The word presented in each trial
-- `sentences` - The sentence presented in each trial
-- `responses` - Raw participant responses ('r' for related, 'u' for unrelated)
-- `reaction_times` - Response times for each trial (in milliseconds)
-- `word_types` - Word type classification ('benign' or 'threat')
-- `scenario_types` - Scenario categories ('anxiety', 'depression', or 'positive')
+- `__js_words` - The word presented in each trial
+- `__js_sentences` - The sentence presented in each trial
+- `__js_responses` - Raw participant responses ('r' for related, 'u' for unrelated)
+- `__js_reaction_times` - Response times for each trial (in milliseconds)
+- `__js_word_types` - Word type classification ('benign' or 'threat')
+- `__js_scenario_types` - Scenario categories ('anxiety', 'depression', or 'positive')
+
+(Note: It is two underscores followed by "js", and then one more underscore, and then the names.)
 
 **IMPORTANT**: Create exactly these 6 embedded data fields in your Qualtrics survey flow. Each field will contain comma-separated values for all 54 trials.
 
