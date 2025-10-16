@@ -137,7 +137,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p><strong>3.</strong> You will be asked whether a word and the sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
             <p>Press the <strong>"R" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
             <p>Press the <strong>"U" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
-            <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded.</p><br>
+            <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded. The trial will move on after 5 seconds if a choice is not selected.</p><br>
             <p>There will be 4 practice trials before the main task begins. Please press either the "R" key or the "U" key to proceed.</p><br>
             </div>
         `,
@@ -217,12 +217,17 @@ Qualtrics.SurveyEngine.addOnload(function () {
           "</div>"
       },
       choices: ['r', 'u'],
+      trial_duration: 5000,
       post_trial_gap: 500,
       data: {
         task: 'practice_relatedness_judgment',
         word: jsPsych.timelineVariable('word'),
         sentence: jsPsych.timelineVariable('sentence'),
         word_type: jsPsych.timelineVariable('word_type')
+      },
+      on_finish: (data) => {
+        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'timeout';
+        data.endorsement = (data.response === 'r') ? 1 : 0;
       },
     }
 
@@ -239,6 +244,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
           "</div>"
       },
       choices: ['r', 'u'],
+      trial_duration: 5000,
       post_trial_gap: 500,
       data: {
         task: 'relatedness_judgment',
@@ -246,6 +252,10 @@ Qualtrics.SurveyEngine.addOnload(function () {
         sentence: jsPsych.timelineVariable('sentence'),
         word_type: jsPsych.timelineVariable('word_type'),
         scenario_type: jsPsych.timelineVariable('scenario_type')
+      },
+      on_finish: (data) => {
+        data.response_type = data.response === 'r' ? 'related' : data.response === 'u' ? 'unrelated' : 'timeout';
+        data.endorsement = (data.response === 'r') ? 1 : 0;
       },
     }
 
