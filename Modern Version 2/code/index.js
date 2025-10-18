@@ -59,7 +59,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
     // Scenarios for the experiment
     var stimuli = [
       // ANXIETY items
-      { stimulus: "The flight attendant announces a flight delay. There is a/an _____.", words: ["Aircraft maintenance", "Distancing himself"], labels: ["benign", "anxiety"] },
+      { stimulus: "The flight attendant announces a flight delay. There is a/an _____.", words: ["Aircraft maintenance", "Bomb threat"], labels: ["benign", "anxiety"] },
       { stimulus: "People laugh after something you said. You said something _____.", words: ["Funny", "Embarrassing"], labels: ["benign", "anxiety"] },
       { stimulus: "You have a big presentation tomorrow. You cannot sleep because you are _____.", words: ["Excited", "Unprepared"], labels: ["benign", "anxiety"] },
       { stimulus: "You finish last of everyone on a test. You are _____.", words: ["Cautious", "Stupid"], labels: ["benign", "anxiety"] },
@@ -103,14 +103,14 @@ Qualtrics.SurveyEngine.addOnload(function () {
       type: "html-keyboard-response",
       stimulus: `
             <div style="font-size:20px;">
-            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) Modern Task.</p><br><br>
+            <p style="font-weight:bold;">You will now proceed to the Word Sentence Association Paradigm (WSAP) New Task.</p><br><br>
             <p style="font-weight:bold;text-decoration:underline;">Instructions</p><br>
             <p>In this task, a fixation cross ('+') will appear for 0.5 seconds, indicating the start of a trial.</p><br>
             <p>After 0.5 seconds is up, you will be presented with a sentence. Each sentence will be in a fill-in-the-blank format, like such:</p><br>
             <p style="font-style:italic;">I am feeling tired. I must be _____.</p><br>
             <p>Please press the <strong>spacebar</strong> after you have finished reading the sentence. Thereafter, you will be presented with two words below the sentence. Your job is to complete the sentence with the word of your choice, <strong><u>as soon as possible</u></strong>.</p><br>
             <p>Use the "F" or the "J" keys on your keyboard to indicate the words. Use the <strong>"F" key</strong> to indicate the word on the <strong>left</strong>; use the <strong>"J" key</strong> to indicate the word on the <strong>right</strong>. The word options will only appear for 3 seconds before the next trial begins.</p><br>
-            <p>There will be 6 practice trials before the main task begins. Please press either the "F" key or the "J" key to proceed.</p><br>
+            <p>There will be 2 practice trials before the main task begins. Please press either the "F" key or the "J" key to proceed.</p><br>
             </div>
         `,
       choices: ['f', 'j'],
@@ -128,7 +128,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p style="font-style:italic;">I am feeling tired. I must be _____.</p><br>
             <p>Please press the <strong>spacebar</strong> after you have finished reading the sentence. Thereafter, you will be presented with two words below the sentence. Your job is to complete the sentence with the word of your choice, <strong><u>as soon as possible</u></strong>.</p><br>
             <p>Use the "F" or the "J" keys on your keyboard to indicate the words. Use the <strong>"F" key</strong> to indicate the word on the <strong>left</strong>; use the <strong>"J" key</strong> to indicate the word on the <strong>right</strong>. The word options will only appear for 3 seconds before the next trial begins.</p><br>
-            <p>Please complete <strong>all 100 trials</strong>. This task is estimated to take <strong>12 minutes</strong>. Please press either the "F" key or the "J" key to proceed.</p><br>
+            <p>Please complete <strong>all 27 trials</strong>. This task is estimated to take <strong>4 minutes</strong>. Please press either the "F" key or the "J" key to proceed.</p><br>
             </div>
         `,
       choices: ['f', 'j'],

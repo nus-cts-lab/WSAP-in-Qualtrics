@@ -1,4 +1,6 @@
-# WSAP-in-Qualtrics Modern / Old Version
+# WSAP-in-Qualtrics New / Old Version
+
+**Note: The "Modern" version has been renamed to "New" version in the task instructions.**
 
 This repository contains the instructions and the relevant code snippets for the Word-Sentence Association Paradigm (WSAP) task, to be embedded into Qualtrics.
 

@@ -57,7 +57,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
 
     var base_scenarios = [
       // ANXIETY items
-      { stimulus: "The flight attendant announces a flight delay.", words: ["Aircraft maintenance", "Distancing himself"], labels: ["benign", "anxiety"] },
+      { stimulus: "The flight attendant announces a flight delay.", words: ["Aircraft maintenance", "Bomb threat"], labels: ["benign", "anxiety"] },
       { stimulus: "People laugh after something you said.", words: ["Funny", "Embarrassing"], labels: ["benign", "anxiety"] },
       { stimulus: "You have a big presentation tomorrow, and you cannot sleep.", words: ["Excited", "Unprepared"], labels: ["benign", "anxiety"] },
       { stimulus: "You finish last among everyone on a test.", words: ["Cautious", "Stupid"], labels: ["benign", "anxiety"] },
@@ -137,8 +137,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
             <p><strong>3.</strong> You will be asked whether a word and the sentence are <strong>RELATED</strong> or <strong>UNRELATED</strong>.</p><br>
             <p>Press the <strong>"R" key</strong> if you think the word and sentence are <strong>RELATED</strong>.</p>
             <p>Press the <strong>"U" key</strong> if you think the word and sentence are <strong>UNRELATED</strong>.</p><br>
-            <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded. The trial will move on after 5 seconds if a choice is not selected.</p><br>
-            <p>There will be 4 practice trials before the main task begins. Please press either the "R" key or the "U" key to proceed.</p><br>
+            <p>Please respond as quickly and accurately as possible. Your reaction times will be recorded. The word options will only appear for 3 seconds before the next trial begins.</p><br>
+            <p>There will be 2 practice trials before the main task begins. Please press either the "R" key or the "U" key to proceed.</p><br>
             </div>
         `,
       choices: ['r', 'u'],
@@ -217,7 +217,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
           "</div>"
       },
       choices: ['r', 'u'],
-      trial_duration: 5000,
+      trial_duration: 3000,
       post_trial_gap: 500,
       data: {
         task: 'practice_relatedness_judgment',
@@ -244,7 +244,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
           "</div>"
       },
       choices: ['r', 'u'],
-      trial_duration: 5000,
+      trial_duration: 3000,
       post_trial_gap: 500,
       data: {
         task: 'relatedness_judgment',
